@@ -1,0 +1,329 @@
+{% load static %}
+{% load compress %}
+<!DOCTYPE html>
+<html lang="en" dir="rtl" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ثبت نام</title>
+    <link rel="stylesheet" href="{% static 'styles/app.css' %}">
+
+</head>
+
+<body>
+
+<div id="toastContainer" style="position: fixed; top: 20px; left: 20px; z-index: 9999; width: 300px;"></div>
+
+<section class="relative flex items-center justify-center min-h-screen w-full">
+    <!-- background -->
+    <div class="pointer-events-none absolute inset-0 flex w-screen items-center justify-center overflow-hidden [mask-image:radial-gradient(circle_at_center,rgba(255,255,255,1)_0%,rgba(255,255,255,0)_85%)]">
+        <svg class="absolute left-0 top-0 h-full w-full stroke-black/10 stroke-[2] [mask-image:radial-gradient(circle_at_center,rgba(255,255,255,1)_20%,rgba(255,255,255,0)_95%)] dark:stroke-white/10">
+            <rect width="100%" height="100%" stroke-width="0" fill="url(#grid-pattern)"></rect>
+            <defs>
+                <pattern id="grid-pattern" viewBox="0 0 64 64" width="60" height="60" patternUnits="userSpaceOnUse">
+                    <path d="M64 0H0V64" fill="none"></path>
+                </pattern>
+            </defs>
+        </svg>
+    </div>
+
+    <div class="relative w-[27rem] mx-5 flex flex-col justify-center py-12 px-4 md:px-8 bg-white dark:bg-gray-800 shadow-md rounded-xl">
+        <div class="flex items-center justify-center">
+            <div class="flex flex-col text-center">
+                <img src="{% static 'images/favicon2.png' %}" alt="Logo" class="h-28 block">
+            </div>
+        </div>
+        <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <form class="space-y-5" action="{% url 'accounts:register' %}" method="POST">
+                {% csrf_token %}
+                {% if messages %}
+                    {% for msg in messages %}
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                            showToast("{{ msg|escapejs }}", "{{ msg.tags|default:'info' }}");});
+                        </script>
+                    {% endfor %}
+                {% endif %}
+                <div>
+                    <label for="email" class="block text-sm/6 font-medium text-gray-500 dark:text-gray-300"></label>
+                    <div class="mt-3">
+                        شماره موبایل {{ form.phone }}
+                        {% if form.phone.errors %}
+                            <p class="text-red-500 text-sm">
+                                {{ form.phone.errors.0 }}
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    <div class="mt-3">
+                        رمز عبور {{ form.password1 }}
+                        {% if form.password1.errors %}
+                            <p class="text-red-500 text-sm">
+                                {{ form.password1.errors.0 }}
+                            </p>
+                        {% endif %}
+                    </div>
+                    <!-- strength bar -->
+
+                    <div class="mt-2">
+                        <div class="w-full h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full overflow-hidden">
+                            <div id="passwordStrengthBar" class="h-full w-0 bg-white transition-all duration-300 rounded-full"></div>
+                        </div>
+                        <p id="passwordStrengthText" class="text-xs mt-2 text-gray-500 dark:text-gray-400"></p>
+                    </div>
+
+                    <div class="mt-3">
+                        تکرار رمز عبور {{ form.password2 }}
+                        {% if form.password2.errors %}
+                            <p class="text-red-500 text-sm">
+                                {{ form.password2.errors.0 }}
+                            </p>
+                        {% endif %}
+                        <p id="passwordMatchText" class="text-xs mt-2 text-gray-500 dark:text-gray-400"></p>
+                    </div>
+                </div>
+                <div class="mt-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                    <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">شرایط رمز عبور:</h4>
+
+                        <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+
+                            <li id="rule-length" class="flex items-center">
+                                <span class="rule-dot w-2 h-2 bg-gray-400 rounded-full ml-2"></span>حداقل ۸ کاراکتر
+                            </li>
+                            <li id="rule-uppercase" class="flex items-center">
+                                <span class="rule-dot w-2 h-2 bg-gray-400 rounded-full ml-2"></span>حداقل یک حرف بزرگ (A-Z)
+                            </li>
+                            <li id="rule-number" class="flex items-center">
+                                <span class="rule-dot w-2 h-2 bg-gray-400 rounded-full ml-2"></span>حداقل یک عدد (0-9)
+                            </li>
+                            <li id="rule-special" class="flex items-center">
+                                <span class="rule-dot w-2 h-2 bg-gray-400 rounded-full ml-2"></span>حداقل یک کاراکتر ویژه (!@#$%^&*)
+                            </li>
+                        </ul>
+                    </div>
+                <button id="registerSubmitBtn" type="submit" class="submit-btn">ارسال کد یکبارمصرف</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% compress js %}
+    <script src="{% static 'scripts/app.js' %}"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const passwordInput = document.getElementById("password");
+  const confirmInput = document.getElementById("rePassword");
+  const submitBtn = document.getElementById("registerSubmitBtn");
+
+  const strengthBar = document.getElementById("passwordStrengthBar");
+  const strengthText = document.getElementById("passwordStrengthText");
+  const matchText = document.getElementById("passwordMatchText");
+
+  const ruleLength = document.getElementById("rule-length");
+  const ruleUppercase = document.getElementById("rule-uppercase");
+  const ruleNumber = document.getElementById("rule-number");
+  const ruleSpecial = document.getElementById("rule-special");
+
+  if (!passwordInput || !confirmInput || !submitBtn || !strengthBar) return;
+
+  // Initialize button style: disabled, grey
+  function setButtonState(valid) {
+    submitBtn.disabled = !valid
+  }
+
+  function setRuleState(element, valid) {
+    const dot = element.querySelector(".rule-dot");
+    if (valid) {
+      element.classList.remove("text-gray-600", "dark:text-gray-400");
+      element.classList.add("text-green-600", "dark:text-green-400");
+      if (dot) {
+        dot.classList.remove("bg-gray-400");
+        dot.classList.add("bg-green-500");
+      }
+    } else {
+      element.classList.remove("text-green-600", "dark:text-green-400");
+      element.classList.add("text-gray-600", "dark:text-gray-400");
+      if (dot) {
+        dot.classList.remove("bg-green-500");
+        dot.classList.add("bg-gray-400");
+      }
+    }
+  }
+
+  function checkPasswordStrength(password) {
+    const rules = {
+      length: password.length >= 8,
+      uppercase: /[A-Z]/.test(password),
+      number: /[0-9]/.test(password),
+      special: /[!@#$%^&*(),.?":{}|<>_\-]/.test(password)
+    };
+    const passedCount = Object.values(rules).filter(Boolean).length;
+    return { rules, passedCount };
+  }
+
+  function updateUI() {
+    const password = passwordInput.value;
+    const confirmPassword = confirmInput.value;
+
+    const { rules, passedCount } = checkPasswordStrength(password);
+
+    // Update rule indicators
+    setRuleState(ruleLength, rules.length);
+    setRuleState(ruleUppercase, rules.uppercase);
+    setRuleState(ruleNumber, rules.number);
+    setRuleState(ruleSpecial, rules.special);
+
+    // Password strength bar
+    let width = 0;
+    let color = "";
+    let text = "";
+    if (password.length === 0) {
+      width = 0;
+      color = "bg-white";
+      text = "";
+    } else if (passedCount <= 2) {
+      width = 33;
+      color = "bg-yellow-400";
+      text = "ضعیف";
+    } else if (passedCount === 3) {
+      width = 66;
+      color = "bg-yellow-500";
+      text = "متوسط";
+    } else {
+      width = 100;
+      color = "bg-green-500";
+      text = "قوی";
+    }
+
+    strengthBar.style.width = width + "%";
+    strengthBar.className = `h-full transition-all duration-300 rounded-full ${color}`;
+    strengthText.textContent = text;
+
+    // Password match validation
+    let passwordsMatch = false;
+    if (confirmPassword.length > 0) {
+      if (password === confirmPassword) {
+        passwordsMatch = true;
+        matchText.textContent = "رمز عبور و تکرار آن یکسان هستند";
+        matchText.className = "text-xs mt-2 text-green-600 dark:text-green-400";
+      } else {
+        matchText.textContent = "رمز عبور و تکرار آن یکسان نیستند";
+        matchText.className = "text-xs mt-2 text-red-500";
+      }
+    } else {
+      matchText.textContent = "";
+      matchText.className = "text-xs mt-2 text-gray-500 dark:text-gray-400";
+    }
+
+    // Evaluate if form can submit
+    const passwordValid = rules.length && rules.uppercase && rules.number && rules.special;
+    const formValid = passwordValid && passwordsMatch;
+
+    // Update button style based on validity
+    setButtonState(formValid);
+  }
+
+  passwordInput.addEventListener("input", updateUI);
+  confirmInput.addEventListener("input", updateUI);
+
+  // Set initial button style (grey) and no submit
+  setButtonState(false);
+  // Initial UI update
+  updateUI();
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    window.showToast = function(message, type = "success") {
+
+        const container = document.getElementById("toastContainer");
+        if (!container) return;
+
+        const toast = document.createElement("div");
+        toast.className = `custom-toast toast-${type}`;
+
+        toast.innerHTML = `
+            <div>${message}</div>
+            <button>&times;</button>
+        `;
+
+        container.appendChild(toast);
+
+        // Animate
+        setTimeout(() => toast.classList.add("show"), 10);
+
+        function removeToast() {
+            toast.classList.remove("show");
+            setTimeout(() => toast.remove(), 400);
+        }
+
+        // Auto remove
+        const autoRemove = setTimeout(removeToast, 3500);
+
+        // Manual close
+        toast.querySelector("button").addEventListener("click", function() {
+            clearTimeout(autoRemove);
+            removeToast();
+        });
+
+        // Pause on hover
+        toast.addEventListener("mouseenter", () => clearTimeout(autoRemove));
+        toast.addEventListener("mouseleave", () => setTimeout(removeToast, 2000));
+    };
+
+});
+</script>
+
+<style>
+.custom-toast {
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    transform: translateX(60px);
+    transition: all 0.4s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.custom-toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.toast-success { background: linear-gradient(135deg, #16a34a, #22c55e); }
+.toast-danger  { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+.toast-warning { background: linear-gradient(135deg, #d97706, #f59e0b); }
+.toast-info    { background: linear-gradient(135deg, #2563eb, #1e40af); }
+
+.custom-toast button {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.8);
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+}
+.custom-toast button:hover {
+    color: #fff;
+}
+</style>
+
+
+{% endcompress %}
+
+
+</body>
+
+</html>

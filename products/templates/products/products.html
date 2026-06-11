@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %} فروشگاه {% endblock %}
+{% block shop %}
+
+    <main class="container">
+        <!-- Breadcrumb -->
+        <nav class="flex mt-8" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                <li class="inline-flex items-center">
+                    <a href="{% url 'home:home' %}"
+                       class="inline-flex items-center text-sm gap-x-1  text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                        <svg class="size-4 mb-0.5">
+                            <use href="#home"></use>
+                        </svg>
+                        صفحه اصلی
+                    </a>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true"
+                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="m1 9 4-4-4-4"></path>
+                        </svg>
+                        <span class="ms-1 text-sm  text-gray-500 md:ms-2 dark:text-gray-400">فروشگاه</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+        <div class="flex flex-col lg:flex-row gap-4 mt-5">
+
+            <!-- TOP FILTER BOX & PRODUCT & PAGINATION -->
+            <div class="lg:w-3/4">
+                <!-- MOBILE FILTERS -->
+                <div class="flex lg:hidden items-center gap-x-2">
+                    <!-- SORT BTN -->
+                    <button class="sort-modal-open text-sm mb-4 py-1.5 px-3 app-border rounded-full flex items-center gap-x-1">
+                        <span>مرتب‌سازی</span>
+                    </button>
+                    <!-- SORT MODAL -->
+                    <div class="sort-modal">
+                        <div class="flex justify-between sort-modal-close">
+                            <p>مرتب سازی بر اساس </p>
+                            <svg class="size-5 text-gray-800 dark:text-gray-300">
+                                <use href="#x-mark"></use>
+                            </svg>
+                        </div>
+
+                        <ul class="flex w-full flex-col items-center justify-center divide-y divide-gray-300 dark:divide-gray-200/20 text-sm child:py-3">
+                            <li>
+                                <a href="?ordering=new"
+                                   class="w-full block text-center py-2
+                                   {% if request.GET.ordering == 'new' %}
+                                       text-blue-600 dark:text-blue-400 font-bold
+                                   {% endif %}">
+                                    جدیدترین
+                                </a>
+                            </li>
+                            <li>
+                                <a href="?ordering=expensive"
+                                   class="w-full block text-center py-2
+                                   {% if request.GET.ordering == 'expensive' %}
+                                       text-blue-600 dark:text-blue-400 font-bold
+                                   {% endif %}">
+                                    گران‌ترین
+                                </a>
+                            </li>
+                            <li>
+                                <a href="?ordering=cheap"
+                                   class="w-full block text-center py-2
+                                   {% if request.GET.ordering == 'cheap' %}
+                                       text-blue-600 dark:text-blue-400 font-bold
+                                   {% endif %}">
+                                    ارزان‌ترین
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- TOP FILTER BOX -->
+                <div class="hidden lg:flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-x-5">
+                        <!-- Icon + Label -->
+                        <div class="flex items-center gap-x-2">
+                            <svg class="size-6 text-gray-400">
+                                <use href="#sort-list"></use>
+                            </svg>
+                            <h2 class="font-DanaDemiBold text-gray-400">مرتب‌سازی :</h2>
+                        </div>
+                        <ul class="flex items-center gap-x-1 lg:gap-x-4 child:transition-all child:cursor-pointer child:rounded-lg child:px-2 child:py-1 child:text-sm child:lg:text-base">
+                            <li>
+                                <a href="?ordering=new"
+                                   class="px-2 py-1 rounded
+                                          {% if request.GET.ordering == 'new' %}bg-blue-100 dark:bg-blue-600 text-blue-700 dark:text-white{% else %}text-gray-400{% endif %}">
+                                    جدیدترین
+                                </a>
+                            </li>
+                            <li>
+                                <a href="?ordering=popular"
+                                   class="px-2 py-1 rounded
+                                          {% if request.GET.ordering == 'popular' %}bg-blue-100 dark:bg-blue-600 text-blue-700 dark:text-white{% else %}text-gray-400{% endif %}">
+                                    محبوب‌ترین
+                                </a>
+                            </li>
+                            <li>
+                                <a href="?ordering=expensive"
+                                   class="px-2 py-1 rounded
+                                          {% if request.GET.ordering == 'expensive' %}bg-blue-100 dark:bg-blue-600 text-blue-700 dark:text-white{% else %}text-gray-400{% endif %}">
+                                    گران‌ترین
+                                </a>
+                            </li>
+                            <li>
+                                <a href="?ordering=cheap"
+                                   class="px-2 py-1 rounded
+                                          {% if request.GET.ordering == 'cheap' %}bg-blue-100 dark:bg-blue-600 text-blue-700 dark:text-white{% else %}text-gray-400{% endif %}">
+                                    ارزان‌ترین
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- PRODUCTS -->
+                <div class="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-3 xs:gap-2 sm:gap-4">
+                    {% for product in products %}
+                        <!-- PRODUCT ITEM -->
+                        <div class="product-card group">
+                            <!-- product header -->
+                            <div class="product-card_header">
+                                <div class="flex items-center gap-x-2">
+                                    <!-- Wishlist -->
+                                    <div class="tooltip">
+                                        <button class="rounded-full p-1.5 app-border app-hover">
+                                            <svg class="size-4">
+                                                <use href="#heart"></use>
+                                            </svg>
+                                        </button>
+                                        <div class="tooltiptext">علاقه‌مندی</div>
+                                    </div>
+                                </div>
+                                <!-- badge offer -->
+                                {% if product.off_percent and product.off_percent > 0 %}
+                                    <span class="product-card_badge">{{ product.off_percent }}% تخفیف</span>
+                                {% else %}
+                                    <span class="product-card_badge"></span>
+                                {% endif %}
+                            </div>
+
+                            <!-- product img -->
+                            <a href="{% url 'products:products_detail' category=product.get_category slug=product.slug  %}" class="block overflow-hidden">
+                                {% if product.image %}
+                                    <img class="w-56 h-56 object-cover mx-auto rounded-lg shadow" src="{{ product.image.url }}" alt="{{ product.name }}">
+                                {% else %}
+                                    <img class="w-56 h-56 object-cover mx-auto rounded-lg shadow" src="" alt="بدون تصویر">
+                                {% endif %}
+                            </a>
+
+                            <!-- product footer -->
+                            <div class="space-y-2">
+                                <a href="{% url 'products:products_detail' category=product.get_category slug=product.slug  %}" class="product-card_link">
+                                    {{ product.name }}
+                                </a>
+                                <!-- Price -->
+                                {% if product.off_percent and product.off_percent > 0 %}
+                                    <div class="product-card_price">
+                                        <del>{{ product.old_price | intcomma }} <h6>تومان</h6></del>
+                                        <p>{{ product.offer_price | intcomma }}</p>
+                                        <span>تومان</span>
+                                    </div>
+                                {% else %}
+                                    <div class="product-card_price">
+                                        <p>{{ product.offer_price | intcomma }}</p>
+                                        <span>تومان</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- PAGINATION -->
+                {% if is_paginated %}
+                    <div class="mt-10 w-full flex items-center justify-center">
+                        <ul class="flex items-center gap-x-3 child:flex child:items-center child:justify-center
+                        child:w-8 child:h-8 child:cursor-pointer child:shadow child:rounded-lg
+                        child:transition-all child:duration-300">
+
+                            <!-- Previous -->
+                            {% if page_obj.has_previous %}
+                                <li class="bg-white dark:bg-gray-800 hover:bg-gray-800 dark:hover:bg-blue-500 hover:text-white">
+                                    <a href="?page={{ page_obj.previous_page_number }}">
+                                        <svg class="size-5 rotate-180">
+                                            <use href="#chevron-left"></use>
+                                        </svg>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            <!-- Page numbers -->
+                            {% for num in paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                    <!-- Active page -->
+                                    <li class="text-white bg-blue-500">
+                                        <a href="?page={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% elif num > page_obj.number|add:-2 and num < page_obj.number|add:2 %}
+                                    <!-- Nearby pages -->
+                                    <li class="bg-white dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white">
+                                        <a href="?page={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% elif num == 1 or num == paginator.num_pages %}
+                                    <!-- Always show first/last -->
+                                    <li class="bg-white dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white">
+                                        <a href="?page={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% elif num == page_obj.number|add:-2 or num == page_obj.number|add:2 %}
+                                    <!-- Ellipsis -->
+                                    <li class="bg-white dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white">
+                                        <span>...</span>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            <!-- Next -->
+                            {% if page_obj.has_next %}
+                                <li class="bg-white dark:bg-gray-800 hover:bg-gray-800 dark:hover:bg-blue-500 hover:text-white">
+                                    <a href="?page={{ page_obj.next_page_number }}">
+                                        <svg class="size-5">
+                                            <use href="#chevron-left"></use>
+                                        </svg>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+{% endblock %}

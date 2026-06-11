@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block policy %}
+
+
+<main class="container">
+
+<!-- Breadcrumb -->
+<nav class="flex mt-8" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+        <li class="inline-flex items-center">
+            <a href="{% url 'home:home' %}"
+               class="inline-flex items-center text-sm gap-x-1 text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                <svg class="size-4 mb-0.5">
+                    <use href="#home"></use>
+                </svg>
+                صفحه اصلی
+            </a>
+        </li>
+        <li aria-current="page">
+            <div class="flex items-center">
+                <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                    <path stroke="currentColor" stroke-width="2" d="m1 9 4-4-4-4"/>
+                </svg>
+                <span class="ms-1 text-sm text-gray-500 md:ms-2 dark:text-gray-400">
+                    شرایط و قوانین
+                </span>
+            </div>
+        </li>
+    </ol>
+</nav>
+
+<section class="w-full p-6 rounded-xl shadow bg-white dark:bg-gray-800 mt-8">
+
+<!-- Logo -->
+<a href="{% url 'home:home' %}" class="flex flex-col text-center w-fit mx-auto">
+    <span class="flex items-center justify-center h-28">
+        <img src="{% static 'images/favicon2.png' %}" alt="Logo">
+    </span>
+    <p class="text-gray-400 text-center">
+        قوانین و شرایط فروشگاه CLP Guitar
+    </p>
+</a>
+
+
+<!-- ================================= -->
+<!-- TABLE OF CONTENTS -->
+<!-- ================================= -->
+
+<div class="mt-10 bg-gray-50 dark:bg-gray-900 rounded-lg p-6 border">
+
+<h3 class="text-lg font-semibold text-center mb-4">
+راهنمای سریع صفحه
+</h3>
+
+<div class="grid md:grid-cols-3 gap-4 text-center">
+
+<a href="#payment"
+class="p-4 rounded-lg border hover:bg-blue-50 transition">
+💳 شرایط پرداخت
+</a>
+
+<a href="#shipping"
+class="p-4 rounded-lg border hover:bg-green-50 transition">
+🚚 شرایط ارسال
+</a>
+
+<a href="#warranty"
+class="p-4 rounded-lg border hover:bg-yellow-50 transition">
+🛡 گارانتی و مرجوعی
+</a>
+
+</div>
+</div>
+
+
+<!-- ================================= -->
+<!-- PAYMENT CARD -->
+<!-- ================================= -->
+
+<div id="payment"
+class="mt-10 bg-white dark:bg-gray-900 border rounded-xl p-6 shadow">
+
+<div class="flex items-center gap-3 mb-4">
+<span class="text-2xl">💳</span>
+<h2 class="text-xl font-semibold">
+شرایط و روش‌های پرداخت
+</h2>
+</div>
+
+<p class="leading-8 text-gray-600 dark:text-gray-300">
+در فروشگاه CLP Guitar فرآیند پرداخت به گونه‌ای طراحی شده است که
+مشتریان بتوانند با امنیت کامل و بدون نگرانی خرید خود را انجام دهند.
+تمامی پرداخت‌های اینترنتی از طریق درگاه‌های رسمی بانکی انجام می‌شود
+و اطلاعات کارت بانکی مشتریان در محیطی کاملاً امن پردازش می‌گردد.
+</p>
+
+<div class="mt-4 bg-blue-50 border-r-4 border-blue-400 p-4 rounded">
+<strong>نکته مهم:</strong>
+تمام سفارش‌های اینترنتی تنها پس از پرداخت کامل ثبت و پردازش می‌شوند.
+</div>
+
+<p class="mt-4 leading-8 text-gray-600 dark:text-gray-300">
+برای خریدهای حضوری در فروشگاه CLP امکان خرید اقساطی نیز وجود دارد.
+در این حالت مشتری می‌تواند پنجاه درصد مبلغ فاکتور را به صورت نقدی
+پرداخت کرده و پنجاه درصد باقی‌مانده را در قالب سه فقره چک یک‌ماهه
+پرداخت نماید.
+</p>
+
+<div class="mt-4 bg-yellow-50 border-r-4 border-yellow-400 p-4 rounded">
+پرداخت اقساطی فقط برای خریدهای حضوری فعال است و برای سفارش‌های
+اینترنتی در دسترس نیست.
+</div>
+
+</div>
+
+
+
+<!-- ================================= -->
+<!-- SHIPPING CARD -->
+<!-- ================================= -->
+
+<div id="shipping"
+class="mt-10 bg-white dark:bg-gray-900 border rounded-xl p-6 shadow">
+
+<div class="flex items-center gap-3 mb-4">
+<span class="text-2xl">🚚</span>
+<h2 class="text-xl font-semibold">
+شرایط و روش‌های ارسال کالا
+</h2>
+</div>
+
+<p class="leading-8 text-gray-600 dark:text-gray-300">
+ارسال تمامی سفارش‌های فروشگاه CLP Guitar از طریق شرکت حمل‌ونقل
+تیپاکس انجام می‌شود. پس از ثبت سفارش و تأیید پرداخت، محصول مورد نظر
+به صورت ایمن بسته‌بندی شده و برای مشتری ارسال می‌گردد.
+</p>
+
+<div class="mt-4 bg-green-50 border-r-4 border-green-400 p-4 rounded">
+تمام سازها قبل از ارسال از نظر سلامت فیزیکی و عملکردی بررسی می‌شوند.
+</div>
+
+<p class="mt-4 leading-8 text-gray-600 dark:text-gray-300">
+مدت زمان تحویل بسته به شهر مقصد متفاوت است و معمولاً بین
+۱ تا ۳ روز کاری زمان می‌برد. پس از ارسال سفارش، کد رهگیری تیپاکس
+در اختیار مشتری قرار می‌گیرد.
+</p>
+
+<div class="mt-4 bg-red-50 border-r-4 border-red-400 p-4 rounded">
+در صورت مشاهده آسیب در بسته‌بندی هنگام تحویل،
+حتماً موضوع را همان لحظه به مأمور تیپاکس اطلاع دهید.
+</div>
+
+</div>
+
+
+
+<!-- ================================= -->
+<!-- WARRANTY CARD -->
+<!-- ================================= -->
+
+<div id="warranty"
+class="mt-10 bg-white dark:bg-gray-900 border rounded-xl p-6 shadow">
+
+<div class="flex items-center gap-3 mb-4">
+<span class="text-2xl">🛡</span>
+<h2 class="text-xl font-semibold">
+شرایط تست، گارانتی و مرجوعی
+</h2>
+</div>
+
+<p class="leading-8 text-gray-600 dark:text-gray-300">
+تمام محصولات فروشگاه CLP Guitar دارای گارانتی دو ساله فروشگاهی
+هستند. این گارانتی شامل ایرادات تولیدی، مشکلات مونتاژ و نقص‌های
+فنی در بخش الکترونیک سازها در شرایط استفاده عادی می‌شود.
+</p>
+
+<div class="mt-4 bg-green-50 border-r-4 border-green-400 p-4 rounded">
+<strong>موارد تحت پوشش گارانتی:</strong>
+<ul class="mt-2 list-disc pr-5">
+<li>ایرادات تولید</li>
+<li>مشکلات مونتاژ</li>
+<li>خرابی پیکاپ یا مدار الکترونیکی</li>
+</ul>
+</div>
+
+<div class="mt-4 bg-red-50 border-r-4 border-red-400 p-4 rounded">
+<strong>موارد خارج از گارانتی:</strong>
+<ul class="mt-2 list-disc pr-5">
+<li>ضربه یا سقوط ساز</li>
+<li>رطوبت یا گرمای شدید</li>
+<li>تعمیر توسط افراد غیرمجاز</li>
+</ul>
+</div>
+
+<p class="mt-4 leading-8 text-gray-600 dark:text-gray-300">
+پس از تحویل کالا مشتری ۲۴ ساعت فرصت دارد تا محصول را تست کرده
+و در صورت مشاهده مشکل با پشتیبانی فروشگاه تماس بگیرد.
+</p>
+
+</div>
+
+</section>
+
+</main>
+
+
+<style>
+html{
+scroll-behavior:smooth;
+}
+</style>
+
+
+{% endblock %}

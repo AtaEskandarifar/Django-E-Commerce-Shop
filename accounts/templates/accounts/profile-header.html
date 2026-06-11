@@ -1,0 +1,158 @@
+{% load static %}
+<header class="header">
+    <!-- Desktop -->
+    <div class="container mt-5 hidden flex-col gap-y-6 lg:flex">
+        <!-- TOPBAR -->
+        <div class="flex-between">
+            <!-- Logo -->
+            <a href="{% url 'home:home' %}" class="flex flex-col text-center ml-20">
+                <span class="font-MorabbaMedium text-4xl flex items-center">
+                    <img src="{% static 'images/favicon2.png' %}" alt="Logo" class="h-28 block">
+                </span>
+            </a>
+            <!--  Action -->
+            <div class="flex items-center gap-x-3">
+                <!-- Shoping cart -->
+                <a href="{% url 'carts:cart' %}" class="flex-center p-2 bg-blue-600 text-gray-100 rounded-full relative">
+                    <svg class="size-6">
+                        <use href="#shopping-bag"></use>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <!-- NAVBAR -->
+        <div class="relative flex-between h-16 bg-gray-900 dark:bg-gray-800 rounded-full text-gray-200 px-10">
+            <!-- MENU -->
+            <ul class="flex items-center gap-x-8">
+                <span class="felx flex-col gap-y-2">
+                    <p class="font-DanaMedium text-lg">کاربر :</p>
+                    <p class="text-gray-400">{{ user.phone }}</p>
+                </span>
+                <li class="menu-item">
+                    <svg class="w-5 h-5 ">
+                        <use href="#home"></use>
+                    </svg>
+                    <a href="{% url 'home:home' %}" class="menu-item_link">
+                        صفحه اصلی
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <svg class="w-6 h-6 ">
+                        <use href="#squares"></use>
+                    </svg>
+                    <a href="{% url 'accounts:dashboard' public_id=request.user.public_id %}" class="menu-item_link">
+                        داشبورد
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <svg class="w-5 h-5 ">
+                        <use href="#shopping-bag"></use>
+                    </svg>
+                    <a href="{% url 'orders:order_list'%}" class="menu-item_link">
+                        سفارشات
+                    </a>
+                </li>
+                
+                <li class="menu-item">
+                    <svg class="w-5 h-5 ">
+                        <use href="#arrow-left-end"></use>
+                    </svg>
+                    <a href="{% url 'accounts:logout' %}" class="menu-item_link">
+                        خروج
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- Mobile -->
+    <div class="flex justify-center lg:hidden">
+        <!-- Top Navbar -->
+        <nav class="absolute top-0 inset-x-0 w-full h-16 px-4 shadow-sm dark:bg-gray-800 flex items-center justify-between">
+            <!-- Menu -->
+            <button class="open-menu-mobile flex-center p-2 app-border rounded-full">
+                <svg class=" size-6">
+                    <use href="#bars"></use>
+                </svg>
+            </button>
+            <div class="mobile-menu z-50 flex flex-col">
+                <!--  MENU MOBILE header -->
+                <div class="flex w-full items-center justify-between border-b-normal pb-4">
+                    <a href="{% url 'home:home' %}" class="flex flex-col text-center ml-20">
+                        <span class="font-MorabbaMedium text-4xl flex items-center">
+                            <img src="{% static 'images/favicon2.png' %}" alt="Logo" class="h-28 block">
+                       </span>
+                    </a>
+                    <button class="close-menu-mobile">
+                        <svg class="size-5 text-gray-500 dark:text-gray-200">
+                            <use href="#x-mark"></use>
+                        </svg>
+                    </button>
+                </div>
+                <!-- MENU MOBILE CATEGORY & ACTION  -->
+                <ul class="flex flex-col gap-y-2 text-gray-800 dark:text-gray-100 mt-4">
+                    <li class="mobile-menu-item">
+                        <svg class="size-5">
+                            <use href="#user"></use>
+                        </svg>
+                        <a href="{% url 'accounts:dashboard' public_id=request.user.public_id %}">حساب کاربری</a>
+                    </li>
+                    <li class="mobile-menu-item">
+                        <svg class="size-5">
+                            <use href="#check-badge"></use>
+                        </svg>
+                        <a href="{% url 'home:aboutus' %}">دربـاره مـا</a>
+                    </li>
+                    <li class="mobile-menu-item">
+                        <svg class="size-5">
+                            <use href="#check-badge"></use>
+                        </svg>
+                        <a href="{% url 'home:policy' %}">شرایط و قوانین</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- Logo -->
+            <a href="{% url 'home:home' %}" class="flex flex-col text-center ml-20">
+                <span class="font-MorabbaMedium text-4xl flex items-center">
+                    <img src="{% static 'images/favicon2.png' %}" alt="Logo" class="h-28 block">
+                </span>
+            </a>
+            <span class="">
+            </span>
+        </nav>
+        <!-- bottom Navbar-->
+        <ul class="bottom-navbar">
+            <li class="dark:text-sky-400 text-blue-500 font-DanaMedium">
+                <svg class="size-5">
+                    <use href="#home"></use>
+                </svg>
+                <a href="{% url 'home:home' %}">خانه</a>
+            </li>
+            <li>
+                <svg class="size-5">
+                    <use href="#squares"></use>
+                </svg>
+                <a href="{% url 'products:products' %}">فروشگاه</a>
+            </li>
+            <li>
+                <svg class="size-5">
+                    <use href="#shopping-cart"></use>
+                </svg>
+                <a href="{% url 'carts:cart' %}" class="mobile-cart-btn" onclick="window.location.href=this.href">سبد خرید</a>
+            </li>
+
+            <li>
+                <svg class="size-5">
+                    <use href="#shopping-bag"></use>
+                </svg>
+                <a href="{% url 'orders:order_list' %}" class="mobile-cart-btn" onclick="window.location.href=this.href">سفارشات</a>
+            </li>
+
+            <li>
+                <svg class="size-5">
+                    <use href="#user"></use>
+                </svg>
+                <a href="{% url 'accounts:dashboard' public_id=request.user.public_id %}">حساب من</a>
+            </li>
+        </ul>
+    </div>
+</header>

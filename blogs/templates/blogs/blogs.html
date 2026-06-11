@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}وبلاگ{% endblock %}
+{% block blogs %}
+{% load compress %}
+    <main class="container">
+        <!-- Breadcrumb -->
+        <nav class="flex mt-8" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                <li class="inline-flex items-center">
+                    <a href="{% url 'home:home' %}"
+                       class="inline-flex items-center text-sm gap-x-1  text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                        <svg class="size-4 mb-0.5">
+                            <use href="#home"></use>
+                        </svg>
+                        صفحه اصلی
+                    </a>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true"
+                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"></path>
+                        </svg>
+                        <span class="ms-1 text-sm  text-gray-500 md:ms-2 dark:text-gray-400">مقالات</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <div class="flex flex-col lg:flex-row gap-4 mt-5">
+            <!-- articles -->
+                {% for post in posts %}
+                    <!-- ITEM -->
+                    <div class="group article-box">
+                        <div class="relative overflow-hidden rounded-lg">
+                            {% if post.image %}
+                                <img src="{{ post.image.url }}" class="article-box_img" alt="{{ post.title }}">
+                            {% else %}
+                                <img src="{% static 'images/articles/1.webp' %}" class="article-box_img" alt="{{ post.title }}">
+                            {% endif %}
+                            <div class="absolute opacity-0 left-0 top-0 bottom-0 right-0 bg-black/60 flex items-center justify-center group-hover:opacity-100 duration-300 transition-all rounded-bl-3xl rounded-tr-3xl">
+                                <a href="{{ post.get_absolute_url }}"
+                                   class="flex items-center px-2 py-1 gap-x-1 font-DanaMedium rounded-lg border-2 border-white text-white">
+                                    <p>ادامه مطالب</p>
+                                    <svg class="w-4 h-4 rotate-90">
+                                        <use href="#chevron"></use>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-y-1 py-5 px-1">
+                            <h2 class="font-DanaDemiBold">{{ post.title }}</h2>
+                        </div>
+                        <span class="flex w-full h-1 py-1 border-t border-gray-100 dark:border-white/10"></span>
+                        <div class="flex items-center justify-between text-sm px-1">
+                        <span class="flex items-center gap-x-1 text-blue-500 dark:text-sky-400">
+                            <svg class="w-4 h-4"><use href="#calendar"></use></svg>
+                            <span class="mt-1">{{ post.created_at|date:"Y/m/d" }}</span>
+                        </span>
+                        <span class="flex items-start gap-x-1 text-gray-300"></span>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>هیچ مقاله‌ای یافت نشد.</p>
+                {% endfor %}
+                <div class="mt-10 w-full flex items-center justify-center">
+                    <ul class="flex items-center gap-x-3 child:flex child:items-center child:justify-center child:w-8 child:h-8 child:cursor-pointer child:shadow child:rounded-lg child:transition-all child:duration-300">
+                        {% if page_obj.has_previous %}
+                        <li class="bg-white dark:bg-gray-800 hover:bg-gray-800 dark:hover:bg-blue-500 hover:text-white">
+                            <a href="?page={{ page_obj.previous_page_number }}">
+                                <svg class="size-5 rotate-180">
+                                    <use href="#chevron-left"></use>
+                                </svg>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="text-white bg-blue-500">
+                                    <a href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="bg-white dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white">
+                                    <a href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                        <li class="bg-white dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-blue-500 hover:text-white">
+                            <a href="?page={{ page_obj.next_page_number }}">
+                                <svg class="size-5">
+                                    <use href="#chevron-left"></use>
+                                </svg>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}
