@@ -91,7 +91,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'clp_db',
         'USER': 'sephiroth',
-        'PASSWORD': 'fscty7536',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {'charset': 'utf8mb4'},
@@ -235,7 +235,7 @@ LOGGING = {
     },
 }
 ###############################################################
-ZARINPAL_MERCHANT_ID = "80a48dc0-07e8-404d-b36d-6ae67071caf0"
+ZARINPAL_MERCHANT_ID = ""
 ZARINPAL_SANDBOX = False
-KAVENEGAR_API_KEY = "4C586D384C63776238427379694A73697930476B54495A37636258364655676371792F74616B4A727047413D"
+KAVENEGAR_API_KEY = ""
 ###############################################################
